@@ -21,6 +21,19 @@ app.use(cors());
 app.use(express.json());
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
+app.get('/', (req, res) => {
+  res.json({
+    status: 'ok',
+    message: 'Food and drink backend API',
+    routes: {
+      health: '/health',
+      database: '/health/db',
+      customers: '/api/customers',
+      tables: '/api/tables',
+    },
+  });
+});
+
 app.get('/health', (req, res) => {
   res.json({ status: 'ok' });
 });
