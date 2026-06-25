@@ -5,6 +5,7 @@ const db = require('./config/db');
 
 const authRoutes = require('./routes/authRoutes');
 const userRoutes = require('./routes/userRoutes');
+const customerRoutes = require('./routes/customerRoutes');
 const categoryRoutes = require('./routes/categoryRoutes');
 const productRoutes = require('./routes/productRoutes');
 const cartRoutes = require('./routes/cartRoutes');
@@ -12,6 +13,7 @@ const favoriteRoutes = require('./routes/favoriteRoutes');
 const orderRoutes = require('./routes/orderRoutes');
 const reviewRoutes = require('./routes/reviewRoutes');
 const adminRoutes = require('./routes/adminRoutes');
+const tableRoutes = require('./routes/tableRoutes');
 
 const app = express();
 
@@ -38,6 +40,7 @@ app.get('/health/db', async (req, res) => {
 
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/customers', customerRoutes);
 app.use('/api/categories', categoryRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/carts', cartRoutes);
@@ -46,5 +49,6 @@ app.use('/api/favorites', favoriteRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/reviews', reviewRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/tables', tableRoutes);
 
 module.exports = app;
