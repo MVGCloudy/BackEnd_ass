@@ -27,10 +27,10 @@ exports.getCustomerById = async (req, res) => {
 };
 exports.createCustomer = async (req, res) => {
   try {
-    const { fullName, email, phone, profileImageUrl, address } = req.body;
+    const { fullName, email, phone, password, profileImageUrl, address, isActive } = req.body;
     const [result] = await db.query(
-      'INSERT INTO customers (fullName, email, phone,password, profileImageUrl, address,isActive) VALUES (?, ?, ?, ?, ?)',
-      [fullName, email, phone, password, profileImageUrl, address, 1]
+      'INSERT INTO customers (fullName, email, phone, password, profileImageUrl, address, isActive) VALUES (?, ?, ?, ?, ?, ?, ?)',
+      [fullName, email, phone, password, profileImageUrl, address, isActive ?? 1]
     );
     const newCustomerId = result.insertId;
     const [newCustomerRows] = await db.query(

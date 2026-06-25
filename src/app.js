@@ -41,6 +41,7 @@ app.get('/health/db', async (req, res) => {
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/customers', customerRoutes);
+app.use('/api/customer', customerRoutes);
 app.use('/api/categories', categoryRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/carts', cartRoutes);
@@ -50,5 +51,8 @@ app.use('/api/orders', orderRoutes);
 app.use('/api/reviews', reviewRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/tables', tableRoutes);
+app.use('/customers', customerRoutes);
+app.use('/customer', customerRoutes);
+app.use('/tables', tableRoutes);
 
 module.exports = app;
