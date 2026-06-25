@@ -26,8 +26,8 @@ exports.getReviews = async (req, res) => {
 
 exports.createReview = async (req, res) => {
   try {
-    const { user_id, product_id, rating, comment, status } = req.body;
-    const [result] = await db.query('INSERT INTO reviews (user_id, product_id, rating, comment, status) VALUES (?, ?, ?, ?, ?)', [user_id, product_id, rating, comment, status || 'visible']);
+    const { user_id, product_id, rating, comment } = req.body;
+    const [result] = await db.query('INSERT INTO reviews (user_id, product_id, rating, comment) VALUES (?, ?, ?, ?)', [user_id, product_id, rating, comment]);
     res.status(201).json({ success: true, id: result.insertId, message: 'Review created' });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });

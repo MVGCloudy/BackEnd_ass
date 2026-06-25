@@ -21,8 +21,8 @@ exports.getCategoryById = async (req, res) => {
 
 exports.createCategory = async (req, res) => {
   try {
-    const { name, description, image, status } = req.body;
-    const [result] = await db.query('INSERT INTO categories (name, description, image, status) VALUES (?, ?, ?, ?)', [name, description, image, status || 'active']);
+    const { name, image } = req.body;
+    const [result] = await db.query('INSERT INTO categories (name, image) VALUES (?, ?)', [name, image]);
     res.status(201).json({ success: true, id: result.insertId, message: 'Category created' });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
@@ -31,8 +31,8 @@ exports.createCategory = async (req, res) => {
 
 exports.updateCategory = async (req, res) => {
   try {
-    const { name, description, image, status } = req.body;
-    await db.query('UPDATE categories SET name = ?, description = ?, image = ?, status = ? WHERE id = ?', [name, description, image, status, req.params.id]);
+    const { name, image } = req.body;
+    await db.query('UPDATE categories SET name = ?, image = ? WHERE id = ?', [name, image, req.params.id]);
     res.json({ success: true, message: 'Category updated' });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });

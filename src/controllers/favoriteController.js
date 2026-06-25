@@ -3,7 +3,7 @@ const db = require('../config/db');
 exports.getFavorites = async (req, res) => {
   try {
     const [rows] = await db.query(`
-      SELECT favorites.*, products.name AS product_name, products.price AS product_price, products.image AS product_image
+      SELECT favorites.*, products.name AS product_name, products.price AS product_price, products.imageUrl AS product_image
       FROM favorites
       LEFT JOIN products ON products.id = favorites.product_id
       ORDER BY favorites.id DESC

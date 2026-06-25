@@ -27,19 +27,18 @@ exports.getOrderById = async (req, res) => {
 
 exports.createOrder = async (req, res) => {
   try {
-    const { user_id, total, status, delivery_address, phone, payment_method, payment_status, note, items } = req.body;
+    const { user_id, total, status, items } = req.body;
     const [result] = await db.query(
-      'INSERT INTO orders (user_id, total, status, delivery_address, phone, payment_method, payment_status, note) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
-      [user_id, total, status || 'pending', delivery_address, phone, payment_method || 'cash', payment_status || 'unpaid', note]
+      'INSERT INTO orders (user_id, total, status) VALUES (?, ?, ?)',
+      [user_id, total, status || 'pending']
     );
     if (Array.isArray(items)) {
       for (const item of items) {
-        await db.query('INSERT INTO order_items (order_id, product_id, quantity, price, subtotal) VALUES (?, ?, ?, ?, ?)', [
+        await db.query('INSERT INTO order_items (order_id, product_id, quantity, price) VALUES (?, ?, ?, ?)', [
           result.insertId,
           item.product_id,
           item.quantity,
           item.price,
-          item.subtotal,
         ]);
       }
     }

@@ -3,7 +3,7 @@ const db = require('../config/db');
 exports.getCart = async (req, res) => {
   try {
     const [rows] = await db.query(`
-      SELECT carts.*, products.name AS product_name, products.price AS product_price, products.image AS product_image
+      SELECT carts.*, products.name AS product_name, products.price AS product_price, products.imageUrl AS product_image
       FROM carts
       LEFT JOIN products ON products.id = carts.product_id
       ORDER BY carts.id DESC

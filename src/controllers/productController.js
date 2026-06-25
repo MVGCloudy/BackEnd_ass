@@ -32,10 +32,10 @@ exports.getProductById = async (req, res) => {
 
 exports.createProduct = async (req, res) => {
   try {
-    const { category_id, name, description, price, image, stock, status } = req.body;
+    const { category_id, name, description, price, imageUrl, image, stock } = req.body;
     const [result] = await db.query(
-      'INSERT INTO products (category_id, name, description, price, image, stock, status) VALUES (?, ?, ?, ?, ?, ?, ?)',
-      [category_id, name, description, price, image, stock || 0, status || 'active']
+      'INSERT INTO products (category_id, name, description, price, imageUrl, stock) VALUES (?, ?, ?, ?, ?, ?)',
+      [category_id, name, description, price, imageUrl || image, stock || 0]
     );
     res.status(201).json({ success: true, id: result.insertId, message: 'Product created' });
   } catch (error) {
@@ -45,10 +45,10 @@ exports.createProduct = async (req, res) => {
 
 exports.updateProduct = async (req, res) => {
   try {
-    const { category_id, name, description, price, image, stock, status } = req.body;
+    const { category_id, name, description, price, imageUrl, image, stock } = req.body;
     await db.query(
-      'UPDATE products SET category_id = ?, name = ?, description = ?, price = ?, image = ?, stock = ?, status = ? WHERE id = ?',
-      [category_id, name, description, price, image, stock, status, req.params.id]
+      'UPDATE products SET category_id = ?, name = ?, description = ?, price = ?, imageUrl = ?, stock = ? WHERE id = ?',
+      [category_id, name, description, price, imageUrl || image, stock, req.params.id]
     );
     res.json({ success: true, message: 'Product updated' });
   } catch (error) {
