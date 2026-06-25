@@ -38,6 +38,40 @@ app.get('/health', (req, res) => {
   res.json({ status: 'ok' });
 });
 
+app.get('/routes', (req, res) => {
+  const routes = app._router.stack
+    .flatMap((layer) => {
+      if (layer.route) {
+        return Object.keys(layer.route.methods).map((method) => ({
+          method: method.toUpperCase(),
+          path: layer.route.path,
+        }));
+      }
+
+      if (layer.name === 'router' && layer.regexp && layer.handle.stack) {
+        const basePath = layer.regexp
+          .toString()
+          .replace('/^\\', '')
+          .replace('\\/?(?=\\/|$)/i', '')
+          .replace(/\\\//g, '/');
+
+        return layer.handle.stack
+          .filter((routeLayer) => routeLayer.route)
+          .flatMap((routeLayer) =>
+            Object.keys(routeLayer.route.methods).map((method) => ({
+              method: method.toUpperCase(),
+              path: `${basePath}${routeLayer.route.path === '/' ? '' : routeLayer.route.path}`,
+            }))
+          );
+      }
+
+      return [];
+    })
+    .sort((a, b) => a.path.localeCompare(b.path));
+
+  res.json({ success: true, data: routes });
+});
+
 app.get('/health/db', async (req, res) => {
   try {
     await db.testConnection();
