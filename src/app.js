@@ -14,6 +14,7 @@ const orderRoutes = require('./routes/orderRoutes');
 const reviewRoutes = require('./routes/reviewRoutes');
 const adminRoutes = require('./routes/adminRoutes');
 const tableRoutes = require('./routes/tableRoutes');
+const bannerPromoRoutes = require('./routes/bannerPromoRoutes');
 
 const app = express();
 
@@ -97,6 +98,7 @@ app.use('/api/favorites', favoriteRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/reviews', reviewRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/banner-promos', bannerPromoRoutes);
 app.use('/api/tables', tableRoutes);
 app.use('/customers', customerRoutes);
 app.use('/customer', customerRoutes);
