@@ -15,9 +15,53 @@ exports.register = async (req, res) => {
 
 exports.login = async (req, res) => {
   try {
-    const { email, password } = req.body;
-    const [rows] = await db.query('SELECT id, name, email, role FROM users WHERE email = ? AND password = ? LIMIT 1', [email, password]);
-    if (!rows.length) return res.status(401).json({ success: false, message: 'Invalid email or password' });
+    const account = (
+      req.body.account ||
+      req.body.phone ||
+      ''
+    ).toString().trim();
+    const password = (req.body.password || '').toString();
+
+    if (!account || !password) {
+      return res.status(400).json({
+        success: false,
+        message: 'Phone number and password are required',
+      });
+    }
+
+    const normalizedPhone = account.replace(/[^0-9]+/g, '');
+    const [rows] = await db.query(
+      `
+        SELECT
+          id,
+          fullName,
+          email,
+          phone,
+          profileImageUrl,
+          address,
+          isActive,
+          createdAt,
+          updatedAt
+        FROM customers
+        WHERE
+          password = ?
+          AND isActive = 1
+          AND (
+            phone = ?
+            OR REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(phone, '+', ''), '-', ''), ' ', ''), '(', ''), ')', '') = ?
+          )
+        LIMIT 1
+      `,
+      [password, account, normalizedPhone]
+    );
+
+    if (!rows.length) {
+      return res.status(401).json({
+        success: false,
+        message: 'Invalid phone number or password. Please try again',
+      });
+    }
+
     return res.json({ success: true, data: rows[0] });
   } catch (error) {
     return res.status(500).json({ success: false, message: error.message });
